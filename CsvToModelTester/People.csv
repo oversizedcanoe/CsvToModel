@@ -1,0 +1,6 @@
+﻿Id,FirstName,LastName,Age,Email,PhoneNumber,IsCurrentEmployee
+1,Homer,Simpson,50,duffluver@gmail.com,555-555-12345,true
+2,Mrs,Claus,100,xmasfan1@aol.com,555-555-5555,true
+3,Ronald,McDonald,120,frieswiththat@hotmail.com,555-555-2345,false
+4,Steve,Jobs,58,windowshater@outlook.com,555-555-1111,false
+5,Laura,Croft,40,raidersfan@yahoo.com,555-555-1010,true

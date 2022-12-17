@@ -5,6 +5,13 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvToModel", "CsvToModel\CsvToModel.csproj", "{CDBEF4C6-F69F-452E-BA20-EEB966063BBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvToModelTester", "CsvToModelTester\CsvToModelTester.csproj", "{B1224E2A-E289-4B45-B501-CDC149EA6F9E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EB9842AB-64D6-4609-82D7-4B1F6302723B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{CDBEF4C6-F69F-452E-BA20-EEB966063BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDBEF4C6-F69F-452E-BA20-EEB966063BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDBEF4C6-F69F-452E-BA20-EEB966063BBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1224E2A-E289-4B45-B501-CDC149EA6F9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1224E2A-E289-4B45-B501-CDC149EA6F9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1224E2A-E289-4B45-B501-CDC149EA6F9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1224E2A-E289-4B45-B501-CDC149EA6F9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
