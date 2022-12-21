@@ -1,4 +1,5 @@
-﻿using CsvToModel.Model;
+﻿using CsvToModel.Interface;
+using CsvToModel.Model;
 using System.Reflection;
 
 namespace CsvToModelTester
@@ -12,7 +13,7 @@ namespace CsvToModelTester
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             
             string csvFilePath = Path.Combine(filePath, csvFileName);
-
+           
             CsvModeler csvModeler = new CsvModeler();
 
             List<Person> people = csvModeler.ParseCsv<Person>(csvFilePath);

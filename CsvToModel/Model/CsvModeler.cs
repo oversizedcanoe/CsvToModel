@@ -4,14 +4,13 @@ using System.Reflection;
 namespace CsvToModel.Model
 {
     // MISC TODO
-    // Have a ICsvModelerConfigurationOptions class to pass options into.
     // Method/class summaries
-    // Allow user to specify differences between column names and property names--ie "Property PhoneNumber is in the CSV as 'Phone'"
     // What to do when a cell is empty or I can't cast to the specified type?
     // Potentially add 2nd implementation where 'where T : class, new()' is used -- should test speed
     public class CsvModeler
     {
         // TODO implement an interface
+        // TODO use CSVModelerOptions in the constructor and implement it's functionality
         public CsvModeler()
         {
 
