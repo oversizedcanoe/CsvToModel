@@ -39,6 +39,11 @@ namespace CsvToModel.Logic
                 throw new Exception($"An unknown exception has occurred while trying to access '{fileName}'. The exception is: {ex.Message}.", ex);
             }
 
+            if (fileInfo.Exists == false)
+            {
+                throw new ArgumentException($"File {fileName} does not exist.");
+            }
+
             if (validExtensions.Contains(fileInfo.Extension) == false)
             {
                 throw new ArgumentException($"File '{fileInfo.Name}' has an invalid extension Accepted extensions: {string.Join(", ", validExtensions)}.");
