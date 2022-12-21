@@ -11,9 +11,6 @@ namespace CsvToModel.Model
 
     public class CsvModeler
     {
-        // TODO set proper other extensions
-        private string[] validExtensions = new string[] { ".csv", ".xslx" };
-
         // TODO implement an interface
         public CsvModeler()
         {
@@ -22,19 +19,7 @@ namespace CsvToModel.Model
 
         public List<T> ParseCsv<T>(string fileName) where T : class
         {
-            // TODO put validation in its own class
-            if (File.Exists(fileName) == false)
-            {
-                throw new ArgumentException($"File '{fileName}' does not exist.");
-            }
-
-            FileInfo fileInfo = new FileInfo(fileName);
-
-            if (validExtensions.Contains(fileInfo.Extension) == false)
-            {
-                throw new ArgumentException($"File '{fileInfo.Name}' has an invalid extension.");
-            }
-
+            
             // TODO validate read access and use an object locker when reading file
 
             // Loop through the first line of the CSV. This will get us the property names.
