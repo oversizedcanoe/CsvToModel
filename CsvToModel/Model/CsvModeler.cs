@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using CsvToModel.Logic;
+using System.Reflection;
 
 namespace CsvToModel.Model
 {
@@ -8,7 +9,6 @@ namespace CsvToModel.Model
     // Allow user to specify differences between column names and property names--ie "Property PhoneNumber is in the CSV as 'Phone'"
     // What to do when a cell is empty or I can't cast to the specified type?
     // Potentially add 2nd implementation where 'where T : class, new()' is used -- should test speed
-
     public class CsvModeler
     {
         // TODO implement an interface
@@ -19,31 +19,32 @@ namespace CsvToModel.Model
 
         public List<T> ParseCsv<T>(string fileName) where T : class
         {
-            
-            // TODO validate read access and use an object locker when reading file
+            // Validate input fileName/file.
+            Validator.ValidateInputFile(fileName);
 
-            // Loop through the first line of the CSV. This will get us the property names.
-            using StreamReader reader = fileInfo.OpenText();
+            // Get the first line of the CSV, which is the property names.
+            using FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
+            using var reader = new StreamReader(fileStream);
 
             string? headerLine = reader.ReadLine();
 
             if (string.IsNullOrWhiteSpace(headerLine))
             {
-                throw new ArgumentException($"File '{fileInfo.Name}' has no content.");
+                throw new ArgumentException($"File '{fileName}' has no content.");
             }
 
-            List<T> result = new List<T>();
-
             Type modelType = typeof(T);
-
             PropertyInfo[] propertyInfos = modelType.GetProperties();
 
             List<string> headers = headerLine.Split(',').ToList();
-            
+
             string[] propertyValues = new string[headers.Count];
 
+            // This will be our return list.
+            List<T> result = new List<T>();
+
+            // Iterate each line, setting the found property values to the current T.
             string? line;
-            
             while ((line = reader.ReadLine()) != null)
             {
                 propertyValues = line.Split(',');
