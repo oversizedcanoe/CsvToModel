@@ -15,7 +15,6 @@ namespace CsvToModel.Model
         private Dictionary<int, PropertyInfo> propertyIndices = new Dictionary<int, PropertyInfo>();
 
         // TODO implement an interface
-        // TODO use CSVModelerOptions in the constructor and implement it's functionality
         public CsvModeler()
         {
             this.options = new CSVModelerOptions();
@@ -53,13 +52,7 @@ namespace CsvToModel.Model
             for (int i = 0; i < headers.Count; i++)
             {
                 string propertyName = headers[i];
-
-                PropertyInfo? propertyInfo = propertyInfos.Where(pi => pi.Name == propertyName).FirstOrDefault();
-
-                if (propertyInfo == null)
-                {
-                    throw new Exception($"Unable to find property for column '{propertyName}'.");
-                }
+                PropertyInfo propertyInfo = this.GetProperty(propertyName, propertyInfos);
 
                 this.propertyIndices.Add(i, propertyInfo);
             }
@@ -98,6 +91,34 @@ namespace CsvToModel.Model
             }
 
             return result;
+        }
+
+        private PropertyInfo GetProperty(string csvColumnName, PropertyInfo[] propertyInfos)
+        {
+            string propertyName = csvColumnName;
+
+            var propertySpecification = this.options.PropertySpecifications.FirstOrDefault(ps=>ps.CsvColumnTitle == csvColumnName);
+
+            if (propertySpecification != null)
+            {
+                propertyName = propertySpecification.ModelPropertyName;
+            }
+            
+            PropertyInfo? propertyInfo = propertyInfos.Where(pi => pi.Name == propertyName).FirstOrDefault();
+
+            if (propertyInfo == null)
+            {
+                string additionalContext = string.Empty;
+                
+                if(propertySpecification != null)
+                {
+                    additionalContext = $" using PropertySpecification {propertySpecification}";
+                }
+                
+                throw new Exception($"Unable to find property for CSV column '{csvColumnName}'{additionalContext}.");
+            }
+
+            return propertyInfo;
         }
     }
 }

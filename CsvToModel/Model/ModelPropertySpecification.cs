@@ -1,9 +1,9 @@
 ﻿namespace CsvToModel.Model
 {
     /// <summary>
-    /// This struct contains pairs of model properties with their associated CSV column title.
+    /// This class contains pairs of model properties with their associated CSV column title.
     /// </summary>
-    public struct ModelPropertySpecification
+    public class ModelPropertySpecification
     {
         /// <summary>
         /// The model's property name.
@@ -24,6 +24,11 @@
         {
             this.ModelPropertyName = modelPropertyName;
             this.CsvColumnTitle = csvColumnTitle;
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(CsvColumnTitle)}={CsvColumnTitle}, {nameof(ModelPropertyName)}={ModelPropertyName}";
         }
     }
 }

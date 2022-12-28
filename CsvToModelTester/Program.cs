@@ -16,11 +16,12 @@ namespace CsvToModelTester
 
             CsvModeler csvModeler = new CsvModeler(new CSVModelerOptions()
             {
+                PropertySpecifications = new List<ModelPropertySpecification> { new ModelPropertySpecification("PhoneNumber", "Phone") }
             });
 
             List<Person> people = csvModeler.ParseCsv<Person>(csvFilePath);
 
-            foreach(var person in people)
+            foreach (var person in people)
             {
                 Console.WriteLine(person.ToString());
             }

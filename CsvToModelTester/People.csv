@@ -1,4 +1,4 @@
-﻿Id,FirstName,LastName,Age,Email,PhoneNumber,IsCurrentEmployee
+﻿Id,FirstName,LastName,Age,Email,Phone,IsCurrentEmployee
 1,Homer,Simpson,50,duffluver@gmail.com,555-555-12345,true
 2,Mrs,Claus,100,xmasfan1@aol.com,555-555-5555,true
 3,Ronald,McDonald,120,frieswiththat@hotmail.com,555-555-2345,false
