@@ -70,6 +70,8 @@ namespace CsvToModel.Model
 
             // Iterate each line, setting the found property values to the current T.
             string? line;
+            int lineNumber = options.SkipSecondRow ? 2 : 1;
+
             while ((line = reader.ReadLine()) != null)
             {
                 propertyValues = line.Split(this.options.Delimeter);
@@ -84,10 +86,19 @@ namespace CsvToModel.Model
                     var propertyToSet = this.propertyIndices[i];
                     var propertyType = propertyToSet.PropertyType;
 
-                    propertyToSet.SetValue(newModelInstance, Convert.ChangeType(propertyValues[i], propertyType));
+                    try
+                    {
+                        propertyToSet.SetValue(newModelInstance, Convert.ChangeType(propertyValues[i], propertyType));
+                    }
+                    catch (FormatException ex)
+                    {
+                        throw new FormatException($"An exception occurred while trying to cast '{propertyValues[i]}' to type '{propertyType.Name}' for " +
+                            $"property '{propertyToSet.Name}' on line {lineNumber}.", ex);
+                    }
                 }
 
                 result.Add(newModelInstance);
+                lineNumber++;
             }
 
             return result;
@@ -97,24 +108,24 @@ namespace CsvToModel.Model
         {
             string propertyName = csvColumnName;
 
-            var propertySpecification = this.options.PropertySpecifications.FirstOrDefault(ps=>ps.CsvColumnTitle == csvColumnName);
+            var propertySpecification = this.options.PropertySpecifications.FirstOrDefault(ps => ps.CsvColumnTitle == csvColumnName);
 
             if (propertySpecification != null)
             {
                 propertyName = propertySpecification.ModelPropertyName;
             }
-            
+
             PropertyInfo? propertyInfo = propertyInfos.Where(pi => pi.Name == propertyName).FirstOrDefault();
 
             if (propertyInfo == null)
             {
                 string additionalContext = string.Empty;
-                
-                if(propertySpecification != null)
+
+                if (propertySpecification != null)
                 {
                     additionalContext = $" using PropertySpecification {propertySpecification}";
                 }
-                
+
                 throw new Exception($"Unable to find property for CSV column '{csvColumnName}'{additionalContext}.");
             }
 
