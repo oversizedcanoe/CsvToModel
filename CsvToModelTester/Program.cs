@@ -11,10 +11,13 @@ namespace CsvToModelTester
             string csvFileName = "people.csv";
 
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            
+
             string csvFilePath = Path.Combine(filePath, csvFileName);
-           
-            CsvModeler csvModeler = new CsvModeler();
+
+            CsvModeler csvModeler = new CsvModeler(new CSVModelerOptions()
+            {
+                Delimeter= "%",
+            });
 
             List<Person> people = csvModeler.ParseCsv<Person>(csvFilePath);
 

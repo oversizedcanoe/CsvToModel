@@ -1,4 +1,5 @@
-﻿using CsvToModel.Logic;
+﻿using CsvToModel.Interface;
+using CsvToModel.Logic;
 using System.Reflection;
 
 namespace CsvToModel.Model
@@ -9,13 +10,20 @@ namespace CsvToModel.Model
     // Potentially add 2nd implementation where 'where T : class, new()' is used -- should test speed
     public class CsvModeler
     {
+        private ICSVModelerOptions options;
+
         private Dictionary<int, PropertyInfo> propertyIndices = new Dictionary<int, PropertyInfo>();
 
         // TODO implement an interface
         // TODO use CSVModelerOptions in the constructor and implement it's functionality
         public CsvModeler()
         {
-            // Next: begin looking at getting headers a smarter way/putting them in a dictionary or something.
+            this.options = new CSVModelerOptions();
+        }
+
+        public CsvModeler(ICSVModelerOptions options)
+        {
+            this.options = options;
         }
 
         public List<T> ParseCsv<T>(string fileName) where T : class
@@ -40,7 +48,7 @@ namespace CsvToModel.Model
 
             // Get the headers of the CSV, and loop through them to find the matching PropertyInfo. 
             // This will be put into a Dictionary for quick access to the property given the current column index.
-            List<string> headers = headerLine.Split(',').ToList();
+            List<string> headers = headerLine.Split(this.options.Delimeter).ToList();
 
             for (int i = 0; i < headers.Count; i++)
             {
@@ -66,7 +74,7 @@ namespace CsvToModel.Model
             string? line;
             while ((line = reader.ReadLine()) != null)
             {
-                propertyValues = line.Split(',');
+                propertyValues = line.Split(this.options.Delimeter);
 
                 // Other option: instantiate as object? then (T)object at the end?
                 // Or require that T has a public parameter-free constructor, and update the method call to be "where T: class, new()"
