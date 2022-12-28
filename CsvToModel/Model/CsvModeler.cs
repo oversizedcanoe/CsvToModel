@@ -9,11 +9,13 @@ namespace CsvToModel.Model
     // Potentially add 2nd implementation where 'where T : class, new()' is used -- should test speed
     public class CsvModeler
     {
+        private Dictionary<int, PropertyInfo> propertyIndices = new Dictionary<int, PropertyInfo>();
+
         // TODO implement an interface
         // TODO use CSVModelerOptions in the constructor and implement it's functionality
         public CsvModeler()
         {
-
+            // Next: begin looking at getting headers a smarter way/putting them in a dictionary or something.
         }
 
         public List<T> ParseCsv<T>(string fileName) where T : class
@@ -32,11 +34,29 @@ namespace CsvToModel.Model
                 throw new ArgumentException($"File '{fileName}' has no content.");
             }
 
+            // Get the type and properties for T.
             Type modelType = typeof(T);
             PropertyInfo[] propertyInfos = modelType.GetProperties();
 
+            // Get the headers of the CSV, and loop through them to find the matching PropertyInfo. 
+            // This will be put into a Dictionary for quick access to the property given the current column index.
             List<string> headers = headerLine.Split(',').ToList();
 
+            for (int i = 0; i < headers.Count; i++)
+            {
+                string propertyName = headers[i];
+
+                PropertyInfo? propertyInfo = propertyInfos.Where(pi => pi.Name == propertyName).FirstOrDefault();
+
+                if (propertyInfo == null)
+                {
+                    throw new Exception($"Unable to find property for column '{propertyName}'.");
+                }
+
+                this.propertyIndices.Add(i, propertyInfo);
+            }
+
+            // Initialize property value array which we will set to the current line.
             string[] propertyValues = new string[headers.Count];
 
             // This will be our return list.
@@ -53,14 +73,12 @@ namespace CsvToModel.Model
                 T newModelInstance = (T)Activator.CreateInstance(modelType);
 
                 // Loop through properties of this object. Set each property in the new object to the value read on this line.
-                // TODO can this looping/index finding be done outside of the loop somehow?
-                for (int i = 0; i < propertyInfos.Length; i++)
+                for (int i = 0; i < this.propertyIndices.Count; i++)
                 {
-                    var currentProperty = propertyInfos[i];
-                    // TODO is this case insensitive? It should be. Or configuration?
-                    int propertyIndexInCsv = headers.IndexOf(currentProperty.Name);
-                    var currentPropertyType = currentProperty.PropertyType;
-                    currentProperty.SetValue(newModelInstance, Convert.ChangeType(propertyValues[i], currentPropertyType));
+                    var propertyToSet = this.propertyIndices[i];
+                    var propertyType = propertyToSet.PropertyType;
+
+                    propertyToSet.SetValue(newModelInstance, Convert.ChangeType(propertyValues[i], propertyType));
                 }
 
                 result.Add(newModelInstance);
