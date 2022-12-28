@@ -70,6 +70,11 @@ namespace CsvToModel.Model
             // This will be our return list.
             List<T> result = new List<T>();
 
+            if (options.SkipSecondRow)
+            {
+                reader.ReadLine();
+            }
+
             // Iterate each line, setting the found property values to the current T.
             string? line;
             while ((line = reader.ReadLine()) != null)

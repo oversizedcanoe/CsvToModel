@@ -16,7 +16,6 @@ namespace CsvToModelTester
 
             CsvModeler csvModeler = new CsvModeler(new CSVModelerOptions()
             {
-                Delimeter= "%",
             });
 
             List<Person> people = csvModeler.ParseCsv<Person>(csvFilePath);
