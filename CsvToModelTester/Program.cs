@@ -16,7 +16,8 @@ namespace CsvToModelTester
 
             CsvModeler csvModeler = new CsvModeler(new CSVModelerOptions()
             {
-                PropertySpecifications = new List<ModelPropertySpecification> { new ModelPropertySpecification("PhoneNumber", "Phone") }
+                PropertySpecifications = new List<ModelPropertySpecification> { new ModelPropertySpecification("PhoneNumber", "Phone") },
+                IgnoreUnmatchedCsvColumns = true
             });
 
             List<Person> people = csvModeler.ParseCsv<Person>(csvFilePath);

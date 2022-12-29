@@ -32,5 +32,17 @@ namespace CsvToModel.Interface
         /// where "PhoneNumber" is the property name and "PhoneNum" is the CSV column title.
         /// </summary>
         public List<ModelPropertySpecification> PropertySpecifications { get; set; }
+
+        /// <summary>
+        /// Indicates whether to ignore CSV columns which do not have a corresponding property.
+        /// To ignore specific columns, use the 'CsvColumnsToSkip' option.
+        /// Default value is false.
+        /// </summary>
+        public bool IgnoreUnmatchedCsvColumns { get; set; }
+
+        /// <summary>
+        /// Contains all columns in the supplied CSV to not attempt to match to a property of the model.
+        /// </summary>
+        public List<string> CsvColumnsToSkip { get; set; }
     }
 }

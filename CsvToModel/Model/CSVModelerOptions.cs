@@ -11,5 +11,9 @@ namespace CsvToModel.Model
         public bool SkipSecondRow { get; set; } = false;
 
         public List<ModelPropertySpecification> PropertySpecifications { get; set; } = new List<ModelPropertySpecification>();
+
+        public bool IgnoreUnmatchedCsvColumns { get; set; } = false;
+
+        public List<string> CsvColumnsToSkip { get; set; } = new List<string>();
     }
 }

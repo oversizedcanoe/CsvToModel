@@ -4,9 +4,10 @@ using System.Reflection;
 
 namespace CsvToModel.Model
 {
+    // Next: work on new() implementation
+
     // MISC TODO
     // Method/class summaries
-    // What to do when a cell is empty or I can't cast to the specified type?
     // Potentially add 2nd implementation where 'where T : class, new()' is used -- should test speed
     public class CsvModeler
     {
@@ -52,9 +53,18 @@ namespace CsvToModel.Model
             for (int i = 0; i < headers.Count; i++)
             {
                 string propertyName = headers[i];
-                PropertyInfo propertyInfo = this.GetProperty(propertyName, propertyInfos);
 
-                this.propertyIndices.Add(i, propertyInfo);
+                if (this.options.CsvColumnsToSkip.Contains(propertyName) == false)
+                {
+                    PropertyInfo? propertyInfo = this.GetProperty(propertyName, propertyInfos);
+
+                    // Only add the property if it's not null. It could be null if there is no matching property in the
+                    // model and the options dictate to ignore unmatched columns.
+                    if (propertyInfo != null)
+                    {
+                        this.propertyIndices.Add(i, propertyInfo);
+                    }
+                }
             }
 
             // Initialize property value array which we will set to the current line.
@@ -104,7 +114,7 @@ namespace CsvToModel.Model
             return result;
         }
 
-        private PropertyInfo GetProperty(string csvColumnName, PropertyInfo[] propertyInfos)
+        private PropertyInfo? GetProperty(string csvColumnName, PropertyInfo[] propertyInfos)
         {
             string propertyName = csvColumnName;
 
@@ -117,7 +127,7 @@ namespace CsvToModel.Model
 
             PropertyInfo? propertyInfo = propertyInfos.Where(pi => pi.Name == propertyName).FirstOrDefault();
 
-            if (propertyInfo == null)
+            if (propertyInfo == null && this.options.IgnoreUnmatchedCsvColumns == false)
             {
                 string additionalContext = string.Empty;
 
